@@ -1,11 +1,11 @@
 import { Box, Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CartSummary from "../CartSummary";
 
 const Products = () => {
   const [data, setData] = useState([]);
-
+ 
   useEffect(() => {
     let config = {
       method: "get",
@@ -41,9 +41,7 @@ const Products = () => {
               <Typography sx={{ fontSize: 18, fontWeight: "bold" }}>
                 KES {product.price}
               </Typography>
-              <IconButton color="success">
-                <ShoppingCartIcon />
-              </IconButton>
+              <CartSummary product={product}/>
             </Stack>
           </Stack>
         </Grid>

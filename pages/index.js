@@ -1,12 +1,11 @@
-import { Box, Typography } from '@mui/material'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { Box } from "@mui/material";
+
+import Products from "../components/Products";
 
 export default function Home() {
   return (
-    <Box>
-      <Typography>Green Kiosk</Typography>
+    <Box m={{ md: 10, xs: 1 }}>
+      <Products />
     </Box>
-  )
+  );
 }
