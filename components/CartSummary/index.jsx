@@ -9,8 +9,9 @@ import {
   Divider,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, addQuantity, decreaseQuantity } from "../Cart/cartSlice";
+import { addToCart, addQuantity, decreaseQuantity, deleteProduct } from "../Cart/cartSlice";
 
 import { useState } from "react";
 
@@ -45,12 +46,11 @@ const CartSummary = ({ product }) => {
         onClose={handleClose}
         sx={{ px: 3 }}
         PaperProps={{
-          sx: { width: "30%", p: 5 },
+          sx: { width: {md: "30%", xs: "70%"}, p: 5 },
         }}
       >
         {cartItems.map((item) => (
           <Stack key={item._id} pb={2}>
-            {/* {console.log("Item", item)} */}
             <Divider />
 
             <Typography>{item.name}</Typography>
@@ -62,9 +62,15 @@ const CartSummary = ({ product }) => {
               </Box>
               <Typography>{item.quantity}</Typography>
 
-              <Box border={1} p={1} onClick={() => dispatch(decreaseQuantity(item))}>
+              <Button
+                disabled={item.quantity === 1}
+                sx={{cursor: "pointer"}}
+                onClick={() => dispatch(decreaseQuantity(item))}
+              >
                 -
-              </Box>
+              </Button>
+              <IconButton onClick={() => dispatch(deleteProduct(item._id))}><DeleteIcon/></IconButton>
+
             </Stack>
           </Stack>
         ))}

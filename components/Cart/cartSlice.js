@@ -48,8 +48,19 @@ const cartSlice = createSlice({
         }
       }
     },
+    deleteProduct: (state, action) => {
+      const itemIndex = state.findIndex((item) => item._id === action.payload);
+
+      if (itemIndex !== -1) {
+        return state.filter((item) => item._id !== action.payload);
+      }
+    
+      // return the original state if item is not found
+      return state;
+    },
   },
 });
 
-export const { addToCart, addQuantity, decreaseQuantity } = cartSlice.actions;
+export const { addToCart, addQuantity, decreaseQuantity, deleteProduct } =
+  cartSlice.actions;
 export default cartSlice.reducer;
