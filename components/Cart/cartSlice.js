@@ -52,11 +52,8 @@ const cartSlice = createSlice({
       const itemIndex = state.findIndex((item) => item._id === action.payload);
 
       if (itemIndex !== -1) {
-        return state.filter((item) => item._id !== action.payload);
+        state.splice(itemIndex, 1);
       }
-    
-      // return the original state if item is not found
-      return state;
     },
   },
 });
