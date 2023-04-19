@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,6 +9,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useState, useEffect } from "react";
 import axios from "axios";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const columns = [
   { id: "name", label: "Name" },
@@ -33,8 +36,6 @@ const ViewProducts = () => {
     setPage(0);
   };
 
-  console.log("Data", data);
-
   useEffect(() => {
     let config = {
       method: "get",
@@ -52,10 +53,33 @@ const ViewProducts = () => {
         console.log(error);
       });
   }, []);
+
+  const handleDelete = (id) => {
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: `http://localhost:8080/delete/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        alert(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer
+          sx={{ maxHeight: 440, maxWidth: "100%", overflowX: "auto" }}
+        >
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -68,6 +92,7 @@ const ViewProducts = () => {
                     {column.label}
                   </TableCell>
                 ))}
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -91,6 +116,14 @@ const ViewProducts = () => {
                           </TableCell>
                         );
                       })}
+                      <TableCell>
+                        <IconButton onClick={() => handleDelete(row._id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton>
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
