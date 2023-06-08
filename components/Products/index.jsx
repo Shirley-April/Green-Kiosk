@@ -28,9 +28,9 @@ const Products = () => {
     <Grid container spacing={2}>
       {data.map((product, index) => (
         <Grid item key={product._id} md={3} xs={6}>
-          <Stack border={1} px={2}>
+          <Stack border={1} px={2} sx={{borderRadius: 2, py: 2}}>
             <Box p={10}></Box>
-            <Typography>{product.name}</Typography>
+            <Typography sx={{fontWeight: "bold"}}>{product.name}</Typography>
             <Typography variant="subtitle2">{product.description}</Typography>
 
             <Stack
