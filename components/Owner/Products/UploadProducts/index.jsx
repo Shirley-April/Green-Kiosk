@@ -15,7 +15,6 @@ import {
 
 const UploadProducts = () => {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -61,30 +60,43 @@ const UploadProducts = () => {
     category: "",
     "in-stock": "",
   };
-
   const onFileChange = (event) => {
-    setSelectedFile({ selectedFile: event.target.files[0] });
+    setSelectedFile(event.target.files[0]);
   };
 
-  const onFileUpload = () => {
-    const file = selectedFile;
+  const handleSubmit = async (values) => {
 
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      console.log(reader.result);
-    };
-    reader.onerror = function (error) {
-      console.log("Error: ", error);
+    if (!selectedFile) {
+      console.log("Please select a file.");
+      return;
+    }
+
+    // Convert the selected file to Base64
+    const fileBase64 = await convertFileToBase64(selectedFile);
+
+    // Update the file field in the values object with the Base64 string
+    const updatedValues = {
+      ...values,
+      file: fileBase64,
     };
 
-    console.log("File base64", file);
+    console.log("All", updatedValues);
+    setSelectedFile(null);
   };
-
-  const handleSubmit = (values) => {
-    alert(JSON.stringify(values, null, 2))
-  }
-
+  
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result // Extract the Base64 string
+        resolve(base64String);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
 
   return (
     <Stack>
@@ -103,7 +115,7 @@ const UploadProducts = () => {
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {({ values, setFieldValue }) => (
               <Form>
-                {console.log("Inner values accessibility", values)}
+                {/* {console.log("Inner values accessibility", values)} */}
                 <Stack spacing={2}>
                   <FormInput
                     label="name"
@@ -135,12 +147,12 @@ const UploadProducts = () => {
                     type="text"
                     placeholder="In-Stock"
                   />
-                  {/* <TextField
+                  <TextField
                   name="in-stock"
                   type="file"
                   placeholder="In-Stock"
-                  onChange={(e) => handleFile(e)}
-                /> */}
+                  onChange={onFileChange}
+                />
                   <Button variant="outlined" type="submit">
                     Submit
                   </Button>
