@@ -25,28 +25,27 @@ const UploadProducts = () => {
   };
 
   // const handleSubmit = (values) => {
-  // var formdata = new FormData();
-  // formdata.append("image", file);
-  //   // let config = {
-  //   //   method: "post",
-  //   //   maxBodyLength: Infinity,
-  //   //   url: "http://localhost:8080/add-product",
-  //   //   headers: {
-  //   //     "Content-Type": "application/json",
-  //   //   },
-  //   //   data: values,
-  //   // };
+  //   var formdata = new FormData();
+  //   formdata.append("image", file);
+  //   let config = {
+  //     method: "post",
+  //     maxBodyLength: Infinity,
+  //     url: "http://localhost:8080/add-product",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     data: values,
+  //   };
 
-  //   // axios
-  //   //   .request(config)
-  //   //   .then((response) => {
-  //   //     alert(JSON.stringify(response.data));
-  //   //     console.log(JSON.stringify(response.data));
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.log(error);
-  //   //   });
-  //   console.log("Values", values);
+  //   axios
+  //     .request(config)
+  //     .then((response) => {
+  //       alert(JSON.stringify(response.data));
+  //       console.log(JSON.stringify(response.data));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
   // };
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -65,7 +64,6 @@ const UploadProducts = () => {
   };
 
   const handleSubmit = async (values) => {
-
     if (!selectedFile) {
       console.log("Please select a file.");
       return;
@@ -79,17 +77,34 @@ const UploadProducts = () => {
       ...values,
       file: fileBase64,
     };
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8080/add-product",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: updatedValues,
+    };
 
-    console.log("All", updatedValues);
+    axios
+      .request(config)
+      .then((response) => {
+        alert(JSON.stringify(response.data));
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setSelectedFile(null);
   };
-  
+
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const base64String = reader.result // Extract the Base64 string
+        const base64String = reader.result; // Extract the Base64 string
         resolve(base64String);
       };
       reader.onerror = (error) => {
@@ -148,11 +163,11 @@ const UploadProducts = () => {
                     placeholder="In-Stock"
                   />
                   <TextField
-                  name="in-stock"
-                  type="file"
-                  placeholder="In-Stock"
-                  onChange={onFileChange}
-                />
+                    name="in-stock"
+                    type="file"
+                    placeholder="In-Stock"
+                    onChange={onFileChange}
+                  />
                   <Button variant="outlined" type="submit">
                     Submit
                   </Button>
